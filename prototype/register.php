@@ -15,7 +15,6 @@
 <div id="page-wrapper">
 
   <h1>Image File Reader</h1>
-<!--   <div><?php print_r($_POST) ?></div> -->
   <div>
     Select an image file:
     <input type="file" id="fileInput">
@@ -25,7 +24,11 @@
     <input type="textarea" disabled="true" id="shab64" name="shab64" value="" ><br>
     <input type="submit" value="register">
     </form>
+    <a id="download" download="image.png"><button type="button" onClick="download()">Download</button></a>
   </div>
+  <h2>Stego Image</h2>
+  <canvas id="canvas" width=500 height=500>Don't use Microsoft Browsers L0000000SER!!!!</canvas>
+  <h2>Original Image</h2>
   <div id="fileDisplayArea"></div>
 
 </div>
