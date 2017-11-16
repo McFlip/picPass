@@ -6,18 +6,10 @@ function download(){
 }
 
 function dataUrlToBase64 (dataURL){
-  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  return dataURL = dataURL.split(",").pop();
 }
 
-// function base64toHEX(base64) {
-//   var raw = atob(base64);
-//   var HEX = '';
-//   for ( i = 0; i < raw.length; i++ ) {
-//     var _hex = raw.charCodeAt(i).toString(16);
-//     HEX += (_hex.length==2?_hex:'0'+_hex);
-//   }
-//   return HEX.toUpperCase();
-// }
+//TESTING: Don't need this function anymore but it will detect bad Base64
 var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
 function base64_decode(input) {
   var output = new Array();
@@ -55,13 +47,14 @@ function base64_decode(input) {
   }
   return output;
 }
+
 function stego(buffer) { // buffer is dataURL
   // randomisation for STEGO
   var rando = 1;  // Use a secure random function to flip between 0 & 1 each time it's used
   var b64 = dataUrlToBase64(buffer);
   var words = CryptoJS.enc.Base64.parse(b64);
   var key = new Date().getTime();  // timestamp in milliseconds
-  var cipherText = CryptoJS.RC4Drop.encrypt(words, "Secret Passphrase");
+  var cipherText = CryptoJS.RC4Drop.encrypt(words, key.toString());
   var canvas = document.getElementById("canvas");
   var ctx=canvas.getContext("2d");
   var image = new Image();
@@ -69,24 +62,23 @@ function stego(buffer) { // buffer is dataURL
   fileDisplayArea.innerHTML = "";
   fileDisplayArea.appendChild(image);
   image.onload = function(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.height = image.height;
-    canvas.width = image.width;
-    ctx.drawImage(image,0,0);
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var data = imageData.data;
-    // STEGO
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.height = image.height;
+  canvas.width = image.width;
+  ctx.drawImage(image,0,0);
+  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  var data = imageData.data;
 
-    for(var i = 0, n = data.length; i < n; i += 4) {
-
+  // STEGO
+  for(var i = 0, n = data.length; i < n; i += 4) {
 //       data[i] ^= rando;
-      data[i] = 0;
-      data[i + 1] ^= rando;
+    data[i] = 0;
+    data[i + 1] ^= rando;
 //       data[i + 2] ^= rando;
-      data[i + 2] = 255;
-      data[i + 3] ^= rando;
-    }
-    ctx.putImageData(imageData, 0, 0);
+    data[i + 2] = 255;
+    data[i + 3] ^= rando;
+  }
+  ctx.putImageData(imageData, 0, 0);
   }
 
   return dataUrlToBase64(canvas.toDataURL("image/png"));
@@ -96,7 +88,6 @@ window.onload = function() {
 
   var fileInput = document.getElementById('fileInput');
   var fileDisplayArea = document.getElementById('fileDisplayArea');
-
 
   fileInput.addEventListener('change', function(e) {
     var file = fileInput.files[0];
@@ -110,8 +101,7 @@ window.onload = function() {
         var binary = event.target.result;
         var b64 = stego(binary);
         var original = dataUrlToBase64(binary);
-        var ohex = base64_decode(binary);
-        var owords = CryptoJS.enc.Hex.parse(ohex);
+        var owords = CryptoJS.enc.Base64.parse(original);
         var words = CryptoJS.enc.Base64.parse(b64);
         var sha256 = CryptoJS.SHA256(words);
         var osha = CryptoJS.SHA256(owords);
