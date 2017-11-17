@@ -1,4 +1,4 @@
-var rounds = 1000000; //original n for lamportHash
+var rounds = 10; //original n for lamportHash
 
 function download(){
   var download = document.getElementById("download");
@@ -10,45 +10,6 @@ function download(){
 
 function dataUrlToBase64 (dataURL){
   return dataURL = dataURL.split(",").pop();
-}
-
-//TESTING: Don't need this function anymore but it will detect bad Base64
-var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-function base64_decode(input) {
-  var output = new Array();
-  var chr1, chr2, chr3;
-  var enc1, enc2, enc3, enc4;
-  var i = 0;
-
-  var orig_input = input;
-  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-  if (orig_input != input)
-    alert ("Warning! Characters outside Base64 range in input string ignored.");
-  if (input.length % 4) {
-    alert ("Error: Input length is not a multiple of 4 bytes.");
-    return "";
-  }
-
-  var j=0;
-  while (i < input.length) {
-
-    enc1 = keyStr.indexOf(input.charAt(i++));
-    enc2 = keyStr.indexOf(input.charAt(i++));
-    enc3 = keyStr.indexOf(input.charAt(i++));
-    enc4 = keyStr.indexOf(input.charAt(i++));
-
-    chr1 = (enc1 << 2) | (enc2 >> 4);
-    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-    chr3 = ((enc3 & 3) << 6) | enc4;
-
-    output[j++] = chr1;
-    if (enc3 != 64)
-      output[j++] = chr2;
-    if (enc4 != 64)
-      output[j++] = chr3;
-
-  }
-  return output;
 }
 
 //TESTING: Experimenting with async function
@@ -64,6 +25,7 @@ function sleep(ms) {
 function lamportHash(hash, rnd){
   for(i = 1; i < rnd; i++){
     hash = CryptoJS.SHA256(hash);
+    console.log(hash.toString());
   }
   document.getElementById('sha').value = hash.toString();
   document.getElementById('shab64').value = hash.toString(CryptoJS.enc.Base64);
@@ -71,14 +33,7 @@ function lamportHash(hash, rnd){
 }
 
 function stego(buffer) { // buffer is dataURL
-  // randomisation for STEGO
-  var rando = 1;  // Use a secure random function to flip between 0 & 1 each time it's used
-  var b64 = dataUrlToBase64(buffer);
-  var words = CryptoJS.enc.Base64.parse(b64);
-  var key = new Date().getTime();  // timestamp in milliseconds
-  var cipherText = CryptoJS.RC4Drop.encrypt(words, key.toString());
   var image = new Image();
-
   image.src = buffer;
   fileDisplayArea.innerHTML = "";
   fileDisplayArea.appendChild(image);
@@ -86,17 +41,25 @@ function stego(buffer) { // buffer is dataURL
   image.onload = function(){
     document.getElementById("register").disabled = true;
     document.getElementById('download').disabled = true;
+
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.height = image.height;
     canvas.width = image.width;
     ctx.drawImage(image,0,0);
+
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
+    var rando = 1;  // Use a secure random function to flip between 0 & 1 each time it's used
+    var key = new Date().getTime();  // timestamp in milliseconds
+    console.log("seed: " + key.toString());
+    var b64 = dataUrlToBase64(canvas.toDataURL("image/png"));
+    var words = CryptoJS.enc.Base64.parse(b64);
+    var cipherText = CryptoJS.RC4Drop.encrypt(words, key.toString()).toString();
 
     // STEGO
-    for(var i = 0, n = data.length; i < n; i += 4) {
+    for(i = 0, n = data.length; i < n; i += 4) {
       rando = cipherText[i] & 1;
       data[i] ^= rando;
       rando = cipherText[i] & 2;
@@ -150,5 +113,4 @@ window.onload = function() {
       fileDisplayArea.innerHTML = "File not supported!";
     }
   });
-
 }
