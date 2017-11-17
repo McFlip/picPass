@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="sha256.js"></script>
 <script src="enc-base64.js"></script>
+<script src="rc4.js"></script>
 <script src="images.js"></script>
 
 </head>
@@ -20,11 +21,13 @@
     <input type="file" id="fileInput">
     <form action="register.py" method="get">
     <input type="text" disabled="true" id="uname" name="uname" value = "<?php echo $_POST['uname']; ?>" ><br>
+    <label>Nth sha256</label><br>
     <input type="textarea" disabled="true" id="sha" name="sha" value="" ><br>
+    <label>Nth sha256 in base64</label><br>
     <input type="textarea" disabled="true" id="shab64" name="shab64" value="" ><br>
-    <input type="submit" value="register">
+    <input id="register" type="submit" value="register" disabled="true">
     </form>
-    <a id="download" download="image.png"><button type="button" onClick="download()">Download</button></a>
+    <a id="download" download="image.png"  disabled="true"><button type="button" onClick="download()">Download</button></a>
   </div>
   <h2>Stego Image</h2>
   <canvas id="canvas" width=500 height=500>Don't use Microsoft Browsers L0000000SER!!!!</canvas>
