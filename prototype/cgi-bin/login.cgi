@@ -27,17 +27,12 @@ with conn:
   insert = "INSERT INTO `users` (`Username`, `Password`, `Lamport`) VALUES (?, ?, ?)"
 
   storedPW = conn.execute(select, uname).fetchone()[0]
-  #storedPW = storedPW.fetchone()[0]
-  #storedPW = conn.execute("SELECT `Password` FROM `users` ")
-  #for row in storedPW:
-    #print row[0]
-  #print storedPW.fetchone()[0]
   checkPW = hashlib.sha256(pw).hexdigest()
   if checkPW == storedPW:
     print "<html><body>"
     print "Success!<br>"
     print "</body></html>"
   else:
-    print "FUUUUCK<br>"
+    print "Failed Bad PW<br>"
     print checkPW
   #conn.execute(insert, params)
