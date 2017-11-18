@@ -19,13 +19,14 @@
   <div>
     Select an image file:
     <input type="file" id="fileInput">
-    <form action="register.py" method="get">
-    <input type="text" disabled="true" id="uname" name="uname" value = "<?php echo $_POST['uname']; ?>" ><br>
-    <label>Nth sha256</label><br>
-    <input type="textarea" disabled="true" id="sha" name="sha" value="" ><br>
-    <label>Nth sha256 in base64</label><br>
-    <input type="textarea" disabled="true" id="shab64" name="shab64" value="" ><br>
-    <input id="register" type="submit" value="register" disabled="true">
+<!--  TODO: make the inputs invisible and put the info in label instead    -->
+    <form action="/cgi-bin/register.cgi" method="post">
+      <input type="text" id="uname" name="uname" value="<?php echo $_POST['uname']; ?>" ><br>
+      <label>Nth sha256</label><br>
+      <input type="textarea" id="sha" name="sha" value="" ><br>
+      <label>Nth sha256 in base64</label><br>
+      <input type="textarea" id="shab64" name="shab64" value="" ><br>
+      <input id="register" type="submit" value="register" disabled="true">
     </form>
     <a id="download" download="image.png"  disabled="true"><button type="button" onClick="download()">Download</button></a>
   </div>
