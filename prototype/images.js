@@ -23,9 +23,11 @@ function sleep(ms) {
 }
 
 function lamportHash(hash, rnd){
+  var tempstr = hash.toString();
   for(i = 1; i < rnd; i++){
-    hash = CryptoJS.SHA256(hash);
-    console.log(hash.toString());
+    hash = CryptoJS.SHA256(tempstr);
+    tempstr = hash.toString();
+    console.log(tempstr);
   }
   document.getElementById('sha').value = hash.toString();
   document.getElementById('shab64').value = hash.toString(CryptoJS.enc.Base64);
