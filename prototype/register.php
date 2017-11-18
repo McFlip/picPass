@@ -27,6 +27,8 @@
       <label>Nth sha256 in base64</label><br>
       <input type="textarea" id="shab64" name="shab64" value="" ><br>
       <input id="register" type="submit" value="register" disabled="true">
+      <!-- TESTING: This will actually be a session variable  -->
+      <input type="checkbox" value="True" name="reset"><label>reset pw</label>
     </form>
     <a id="download" download="image.png"  disabled="true"><button type="button" onClick="download()">Download</button></a>
   </div>

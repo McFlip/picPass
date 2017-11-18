@@ -14,9 +14,7 @@
 <body>
 <?php
   $uname = $_POST['uname'];
-//   print_r($uname);
-  echo "\n";
-  $path = "/var/www/html/picPass/prototype/app.db";
+  $path = "/var/www/html/picPass/prototype/db/app.db";
 //   $path = ":memory:";
   try {
     $conn = new PDO("sqlite:" . $path);
@@ -29,8 +27,6 @@
   $sql = "SELECT `Lamport` FROM `users` WHERE `Username` = '$uname'";
   $pdo = $conn->query($sql);
   $result = $pdo->fetch();
-//   echo $sql;
-  print_r($result);
   if($result){
     $result = --$result[0];
 //     echo "<label id='n'>$result</label>";
