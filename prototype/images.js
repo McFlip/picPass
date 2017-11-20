@@ -58,21 +58,15 @@ function stego(buffer) { // buffer is dataURL
     console.log("seed: " + key.toString());
     var b64 = dataUrlToBase64(canvas.toDataURL("image/png"));
     var words = CryptoJS.enc.Base64.parse(b64);
-    var cipherText = CryptoJS.RC4Drop.encrypt(words, key.toString()).toString();
+    var z = CryptoJS.RC4Drop.encrypt(words, key.toString());
+    var cipherText = new Int8Array(z)
 
     // STEGO
     for(i = 0, n = data.length; i < n; i += 4) {
-      rando = cipherText[i] & 1;
-      data[i] ^= rando;
-      rando = cipherText[i] & 2;
-      rando = rando >> 1;
-      data[i + 1] ^= rando;
-      rando = cipherText[i] & 4;
-      rando = rando >> 2;      
-      data[i + 2] ^= rando;
-      rando = cipherText[i] & 8;
-      rando = rando >> 3;      
-      data[i + 3] ^= rando;
+      for(j=0; j < 3; ++j){
+        rando = (data[i + j] ^ cipherText[i + j]) & 1;
+        data[i + j] ^= cipherText[i + j]; //TEST this should show the key
+      }
     }
     console.log("ping");
     ctx.putImageData(imageData, 0, 0);
@@ -100,7 +94,7 @@ window.onload = function() {
       reader.onload = async function(event) {
         var binary = event.target.result;
         stego(binary);
-        await sleep(2000);
+        await sleep(4000);
         console.log("ballz");
         var original = dataUrlToBase64(binary);
         var owords = CryptoJS.enc.Base64.parse(original);
