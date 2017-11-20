@@ -65,10 +65,13 @@ function stego(buffer) { // buffer is dataURL
       rando = cipherText[i] & 1;
       data[i] ^= rando;
       rando = cipherText[i] & 2;
+      rando = rando >> 1;
       data[i + 1] ^= rando;
       rando = cipherText[i] & 4;
+      rando = rando >> 2;      
       data[i + 2] ^= rando;
       rando = cipherText[i] & 8;
+      rando = rando >> 3;      
       data[i + 3] ^= rando;
     }
     console.log("ping");
