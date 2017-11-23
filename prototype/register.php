@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="style.css">
 <script src="sha256.js"></script>
 <script src="enc-base64.js"></script>
-<script src="rc4.js"></script>
 <script src="images.js"></script>
 
 </head>

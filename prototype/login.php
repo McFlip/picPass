@@ -14,10 +14,10 @@
 <body>
 <?php
   $uname = $_POST['uname'];
-  $path = "/var/www/html/picPass/prototype/db/app.db";
+  $path = "/var/www/html/prototype/db/app.db";
 //   $path = ":memory:";
   try {
-    $conn = new PDO("sqlite:" . $path);
+    $conn = new PDO("sqlite3:" . $path);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   } catch(PDOException $e){

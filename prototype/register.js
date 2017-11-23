@@ -1,5 +1,35 @@
 var rounds = 10; //original n for lamportHash
 
+
+// Linear Congruential Generator
+// Variant of a Lehman Generator
+var lcg = (function() {
+  // Set to values from http://en.wikipedia.org/wiki/Numerical_Recipes
+      // m is basically chosen to be large (as it is the max period)
+      // and for its relationships to a and c
+  var m = 4294967296,
+      // a - 1 should be divisible by m's prime factors
+      a = 1664525,
+      // c and m should be co-prime
+      c = 1013904223,
+      seed, z;
+  return {
+    setSeed : function() {
+      var seedArray = new ArrayBuffer(4);
+      var seed32 = new Uint32Array(seedArray);
+      z = seed = window.crypto.getRandomValues(seed32)[0];
+    },
+    getSeed : function() {
+      return seed;
+    },
+    rand : function() {
+      // define the recurrence relationship
+      z = (a * z + c) % m;
+      return z;
+    }
+  };
+}());
+
 function download(){
   var download = document.getElementById("download");
   var image = document.getElementById("canvas").toDataURL("image/png")
@@ -47,36 +77,38 @@ function stego(buffer) { // buffer is dataURL
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.height = image.height;
-    canvas.width = image.width;
+    canvas.height = image.naturalHeight;
+    canvas.width = image.naturalWidth;
     ctx.drawImage(image,0,0);
 
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
-    var rando = 1;  // Use a secure random function to flip between 0 & 1 each time it's used
-    var key = new Date().getTime();  // timestamp in milliseconds
-    console.log("seed: " + key.toString());
-    var b64 = dataUrlToBase64(canvas.toDataURL("image/png"));
-    var words = CryptoJS.enc.Base64.parse(b64);
-    var z = CryptoJS.RC4Drop.encrypt(words, key.toString());
-    var cipherText = new Int8Array(z)
+    lcg.setSeed();
+    console.log("seed: " + lcg.getSeed().toString());
+    var randArray = new ArrayBuffer(data.length);
+    var rand32 = new Uint32Array(randArray);
+    for(i = 0; i < rand32.length; ++i){
+        rand32[i] = lcg.rand();
+    }
+    var rand8 = new Uint8Array(randArray);
 
     // STEGO
     for(i = 0, n = data.length; i < n; i += 4) {
+//       data[i] = 0;  //TEST for fiddling with individual colors
+//       data[i+1] = 0;
+//       data[i+2] = 0;
       for(j=0; j < 3; ++j){
-        rando = (data[i + j] ^ cipherText[i + j]) & 1;
-        data[i + j] ^= cipherText[i + j]; //TEST this should show the key
+        rando = rand8[ (i + j)] && 1;
+        if(rando){
+          data[i + j] |= rando;
+        }else{
+          data[i + j] &= 254;
+        }
       }
     }
-    console.log("ping");
     ctx.putImageData(imageData, 0, 0);
-    console.log("pong");
-    console.log("get");
     stegified = dataUrlToBase64(canvas.toDataURL("image/png"));
-    console.log("some");
-    console.log("fu");
   }
-  console.log("bar")
 }
 
 window.onload = function() {
@@ -95,7 +127,6 @@ window.onload = function() {
         var binary = event.target.result;
         stego(binary);
         await sleep(4000);
-        console.log("ballz");
         var original = dataUrlToBase64(binary);
         var owords = CryptoJS.enc.Base64.parse(original);
         console.log("stegified is " + typeof stegified);
