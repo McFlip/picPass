@@ -98,7 +98,7 @@ function stego(buffer) { // buffer is dataURL
 //       data[i+1] = 0;
 //       data[i+2] = 0;
       for(j=0; j < 3; ++j){
-        rando = rand8[ (i + j)] && 1;
+        rando = rand8[ (i + j)] & 1;
         if(rando){
           data[i + j] |= rando;
         }else{
