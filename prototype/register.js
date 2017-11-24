@@ -42,17 +42,7 @@ function dataUrlToBase64 (dataURL){
   return dataURL = dataURL.split(",").pop();
 }
 
-//TESTING: Experimenting with async function
-function saveCanvas(imageData){
-  return new Promise(context.putImageData(imageData, 0, 0));
-}
-
-//TESTING: workaround for canvas drawing in steg function
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function lamportHash(hash, rnd){
+function lamportHash(callback, hash, rnd){
   var tempstr = hash.toString();
   for(i = 1; i < rnd; i++){
     hash = CryptoJS.SHA256(tempstr);
@@ -61,7 +51,7 @@ function lamportHash(hash, rnd){
   }
   document.getElementById('sha').value = hash.toString();
   document.getElementById('shab64').value = hash.toString(CryptoJS.enc.Base64);
-  document.getElementById('download').disabled = false; //TODO: move to a callback
+  callback(); // enable the download button
 }
 
 function stego(buffer) { // buffer is dataURL
@@ -71,9 +61,6 @@ function stego(buffer) { // buffer is dataURL
   fileDisplayArea.appendChild(image);
 
   image.onload = function(){
-    document.getElementById("register").disabled = true;
-    document.getElementById('download').disabled = true;
-
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -108,6 +95,13 @@ function stego(buffer) { // buffer is dataURL
     }
     ctx.putImageData(imageData, 0, 0);
     stegified = dataUrlToBase64(canvas.toDataURL("image/png"));
+    console.log("stegified is " + typeof stegified);
+    var words = CryptoJS.enc.Base64.parse(stegified);
+    var sha256 = CryptoJS.SHA256(words);
+    console.log("stego 1'st SHA256: " + sha256.toString());
+    lamportHash( () => {
+      document.getElementById('dlButton').disabled = false;
+    }, sha256, rounds);
   }
 }
 
@@ -119,23 +113,21 @@ window.onload = function() {
   fileInput.addEventListener('change', function(e) {
     var file = fileInput.files[0];
     var imageType = /image.*/;
+    document.getElementById("register").disabled = true;
+    document.getElementById('dlButton').disabled = true;
+    document.getElementById('sha').value = "";
+    document.getElementById('shab64').value = "";
 
     if (file.type.match(imageType)) {
       var reader = new FileReader();
 
-      reader.onload = async function(event) {
+      reader.onload = function(event) {
         var binary = event.target.result;
         stego(binary);
-        await sleep(4000);
         var original = dataUrlToBase64(binary);
         var owords = CryptoJS.enc.Base64.parse(original);
-        console.log("stegified is " + typeof stegified);
-        var words = CryptoJS.enc.Base64.parse(stegified);
-        var sha256 = CryptoJS.SHA256(words);
-        console.log("stego 1'st SHA256: " + sha256.toString());
         var osha = CryptoJS.SHA256(owords);
         console.log("original SHA256: " + osha.toString());
-        lamportHash(sha256, rounds);
       }
 
       reader.readAsDataURL(file);

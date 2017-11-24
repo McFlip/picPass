@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="sha256.js"></script>
 <script src="enc-base64.js"></script>
-<script src="images.js"></script>
+<script src="register.js"></script>
 
 </head>
 <body>
@@ -29,7 +29,7 @@
       <!-- TESTING: This will actually be a session variable  -->
       <input type="checkbox" value="True" name="reset"><label>reset pw</label>
     </form>
-    <a id="download" download="image.png"  disabled="true"><button type="button" onClick="download()">Download</button></a>
+    <a id="download" download="image.png"><input id="dlButton" type="button" onClick="download()" value="Download" disabled="true"></a>
   </div>
   <h2>Stego Image</h2>
   <canvas id="canvas" width=500 height=500>Don't use Microsoft Browsers L0000000SER!!!!</canvas>
