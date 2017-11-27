@@ -4,9 +4,10 @@ Picture based authentication.
 
 ## Install Apache
 
-<!--YOU MAY NOT NEED TO DO THIS STEP-->
+--YOU MAY NOT NEED TO DO THIS STEP--
 
-<!--TRY RUNNING LOCALHOST FIRST SEE WHAT COMES UP-->
+
+--TRY RUNNING LOCALHOST FIRST SEE WHAT COMES UP--
 
     sudo apt-get update
     sudo apt-get install apache2
@@ -30,7 +31,7 @@ Run This
     sudo systemctl restart apache2
     sudo service restart apache2
 
-<!--- RUN IT, MAKE SURE PHP WORKS-->
+<center>-- RUN IT, MAKE SURE PHP WORKS--</center>
 
 
 ## Install SQL
@@ -38,11 +39,11 @@ Run This
     sudo apt-get install php7.0-sqlite3
     sudo apache2ctl restart
 
-<!-- THIS MAY NEED TO BE DONE I DON'T KNOW FOR SURE-->
+-- THIS MAY NEED TO BE DONE I DON'T KNOW FOR SURE--
 
-<!--TRY BEFORE MAKING THIS JUMP-->
+--TRY BEFORE MAKING THIS JUMP--
 
-<!--NOTE IF YOUR DATABASE IS USING CGI, SKIP THIS STEP EVEN IF IT DOESNT WORK FOR LATER-->
+--NOTE IF YOUR DATABASE IS USING CGI, SKIP THIS STEP EVEN IF IT DOESNT WORK FOR LATER--
 
     sudo vim /etc/php/7.0/apache2/php.ini
 Insert this
@@ -75,7 +76,7 @@ Insert this
 
     ScriptAlias /cgi-bin/ /var/www/html/picPass/prototype/cgi-bin/ 
 
-^ YES A SLASH NEEDS TO BE AT THE END
+ YES A SLASH NEEDS TO BE AT THE END
 
 GO HERE
 
@@ -89,7 +90,7 @@ INSERT THIS
         SetHandler cgi-script
     </Directory>
 
-^ YES NO SLASH AT THE END OF THIS ONE
+ YES NO SLASH AT THE END OF THIS ONE
 
 ## CGI DATABASE SETUP
     sudo chown www-data db/ #<---- ON THE DIRECTORY
