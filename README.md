@@ -1,7 +1,8 @@
 # picPass
 Picture based authentication.
+# Installiation 
 
-##Install Apache
+## Install Apache
 
 <!--YOU MAY NOT NEED TO DO THIS STEP-->
 
@@ -12,7 +13,7 @@ Picture based authentication.
     sudo apache2ctl configtest
 
 
-##Install PHP
+## Install PHP
 
     sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql
     sudo a2enmod php7.0
@@ -32,7 +33,7 @@ Run This
 <!--- RUN IT, MAKE SURE PHP WORKS-->
 
 
-##Install SQL
+## Install SQL
 
     sudo apt-get install php7.0-sqlite3
     sudo apache2ctl restart
@@ -55,7 +56,7 @@ Run This
 
 
 
-##Install CGI
+## Install CGI
 
     sudo apt-get install curl
     cd /etc/apache2/mods-enabled
