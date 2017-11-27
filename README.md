@@ -1,9 +1,6 @@
 # picPass
 Picture based authentication.
 
-
-#SetupGuide
-
 ##Install Apache
 
 <!--YOU MAY NOT NEED TO DO THIS STEP-->
