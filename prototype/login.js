@@ -7,10 +7,11 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function lamportHash(hash, rnd){
+function lamportHash(hash, rnd, pin){
   var tempstr = hash.toString();
   for(i = 1; i < rnd; i++){
     hash = CryptoJS.SHA256(tempstr);
+//     hash = CryptoJS.HmacSHA256(tempstr, pin);
     tempstr = hash.toString();
     console.log(tempstr);
   }
@@ -34,9 +35,12 @@ window.onload = function() {
         var binary = event.target.result;
         var b64 = dataUrlToBase64(binary);
         var words = CryptoJS.enc.Base64.parse(b64);
-        var sha256 = CryptoJS.SHA256(words);
+        var pin = document.getElementById('pin').value.toString();
+        alert("pin: " + pin);
+        var sha256 = CryptoJS.HmacSHA256(words, pin);
+//         var sha256 = CryptoJS.SHA256(words);
         console.log("1'st SHA256: " + sha256.toString());
-        lamportHash(sha256, rounds);
+        lamportHash(sha256, rounds, pin);
       }
 
       reader.readAsDataURL(file);

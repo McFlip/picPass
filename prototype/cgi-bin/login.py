@@ -18,8 +18,9 @@ print """
 <meta charset="utf-8">
 <title>Pic PassI</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="/stylesheet" href="style.css">
 <script src="/sha256.js"></script>
+<script src="/hmac-sha256.js"></script>
 <script src="/enc-base64.js"></script>
 <script src="/login.js"></script>
 
@@ -31,8 +32,7 @@ with conn:
     query = "SELECT `Username`, `Lamport` FROM `users` WHERE `Username`=?"
     unameQuery = conn.execute(query, (uname,)).fetchone()
     if unameQuery:
-        print 
-        """
+        print """
         <div id="page-wrapper">
 
         <h1>Log in with your picture</h1>
@@ -40,14 +40,11 @@ with conn:
         Select an image file:
         <input type="file" id="fileInput">
         <!--  TODO: make the inputs invisible and put the info in label instead    -->
-        <form action="/prototype/cgi-bin/login.cgi" method="post">
-        <input type="text" id="uname" name="uname" value=""" 
-        unameQuery[0] 
-          
-        """><br>
-        <label>Nth sha256</label><label>N = </label><input id="lamport" name="lamport" """ 
-        unameQuery[1]
-        """><br>
+        <form action="/cgi-bin/login.cgi" method="post">
+        <input type="text" id="uname" name="uname" value="%s"><br>
+        <label>PIN for 2-factor authentication</label><br>
+        <input type="password" id="pin" name="pin"><br>
+        <label>Nth sha256</label><label>N = </label><input id="lamport" name="lamport" value="%s"><br>
         <input type="textarea" id="sha" name="sha" value="" ><br>
         <label>Nth sha256 in base64</label><br>
         <input type="textarea" id="shab64" name="shab64" value="" ><br>
@@ -57,7 +54,7 @@ with conn:
         </div>
         </body>
         </html>
-        """
+        """ % (unameQuery[0],unameQuery[1]-1)
         print unameQuery
     else:
 

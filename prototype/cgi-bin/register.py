@@ -29,6 +29,7 @@ print """
 
   <link rel="stylesheet" href="/style.css">
   <script src="/sha256.js"></script>
+  <script src="/hmac-sha256.js"></script>
   <script src="/enc-base64.js"></script>
   <script src="/register.js"></script>
 
@@ -51,6 +52,8 @@ if not row:
         <input type="textarea" id="sha" name="sha" value="" ><br>
         <label>Nth sha256 in base64</label><br>
         <input type="textarea" id="shab64" name="shab64" value="" ><br>
+        <label>PIN for 2-factor authentication</label><br>
+        <input type="password" id="pin" name="pin"><br>
         <input id="register" type="submit" value="register" disabled="true">
         <!-- TESTING: This will actually be a session variable  -->
         <input type="checkbox" value="True" name="reset"><label>reset pw</label>

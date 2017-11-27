@@ -42,10 +42,11 @@ function dataUrlToBase64 (dataURL){
   return dataURL = dataURL.split(",").pop();
 }
 
-function lamportHash(callback, hash, rnd){
+function lamportHash(callback, hash, rnd, pin){
   var tempstr = hash.toString();
   for(i = 1; i < rnd; i++){
     hash = CryptoJS.SHA256(tempstr);
+//     hash = CryptoJS.HmacSHA256(tempstr, pin);
     tempstr = hash.toString();
     console.log(tempstr);
   }
@@ -96,12 +97,14 @@ function stego(buffer) { // buffer is dataURL
     ctx.putImageData(imageData, 0, 0);
     stegified = dataUrlToBase64(canvas.toDataURL("image/png"));
     console.log("stegified is " + typeof stegified);
+    var pin = document.getElementById('pin').value.toString();
     var words = CryptoJS.enc.Base64.parse(stegified);
-    var sha256 = CryptoJS.SHA256(words);
+//     var sha256 = CryptoJS.SHA256(words);
+    var sha256 = CryptoJS.HmacSHA256(words, pin);
     console.log("stego 1'st SHA256: " + sha256.toString());
     lamportHash( () => {
       document.getElementById('dlButton').disabled = false;
-    }, sha256, rounds);
+    }, sha256, rounds, pin);
   }
 }
 
