@@ -1,6 +1,7 @@
 var rounds = 10; //original n for lamportHash
 
-
+// Function modified from forcewake
+// Original version: https://gist.github.com/forcewake/6527392
 // Linear Congruential Generator
 // Variant of a Lehman Generator
 var lcg = (function() {
