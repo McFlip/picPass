@@ -1,5 +1,16 @@
 # picPass
 Picture based authentication.
+
+# Report
+https://drive.google.com/file/d/1MgLvqDqJXbxoP9TikSMqGc8lZWlAGETY/view?usp=sharing
+
+# Presentation
+
+https://docs.google.com/presentation/d/1wqiPw7-eSTictgOzLA1kvIKVz1j3i9L5VPweA-f1YmQ/edit?usp=sharing
+
+# Demonstration
+
+
 # Installiation 
 
 ## Install Apache
