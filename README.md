@@ -1,15 +1,14 @@
 # picPass
 Picture based authentication.
 
-# Report
+## Report
 https://drive.google.com/file/d/1MgLvqDqJXbxoP9TikSMqGc8lZWlAGETY/view?usp=sharing
 
-# Presentation
-
+## Presentation
 https://docs.google.com/presentation/d/1wqiPw7-eSTictgOzLA1kvIKVz1j3i9L5VPweA-f1YmQ/edit?usp=sharing
 
-# Demonstration
-
+## Demonstration
+<img src="https://github.com/McFlip/picPass/blob/master/templates/STEGO.gif" width="850" height="550" />)
 
 # Installiation 
 
