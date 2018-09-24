@@ -43,13 +43,14 @@ function dataUrlToBase64 (dataURL){
   return dataURL = dataURL.split(",").pop();
 }
 
-function lamportHash(callback, hash, rnd, pin){
+function lamportHash(callback, hash, rnd){
   var tempstr = hash.toString();
   for(i = 1; i < rnd; i++){
     hash = CryptoJS.SHA256(tempstr);
-//     hash = CryptoJS.HmacSHA256(tempstr, pin);
+    //hash = CryptoJS.HmacSHA256(tempstr, pin);
+    //Moved from Here to Stego
     tempstr = hash.toString();
-    console.log(tempstr);
+    console.log("sha " + i + " from client " +tempstr);
   }
   document.getElementById('sha').value = hash.toString();
   document.getElementById('shab64').value = hash.toString(CryptoJS.enc.Base64);
@@ -71,15 +72,18 @@ function stego(buffer) { // buffer is dataURL
     ctx.drawImage(image,0,0);
 
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var data = imageData.data;
-    lcg.setSeed();
+    var data = imageData.data;//Image data being modified in the value of data
+    lcg.setSeed(); //setting the seed
     console.log("seed: " + lcg.getSeed().toString());
     var randArray = new ArrayBuffer(data.length);
-    var rand32 = new Uint32Array(randArray);
-    for(i = 0; i < rand32.length; ++i){
-        rand32[i] = lcg.rand();
-    }
     var rand8 = new Uint8Array(randArray);
+    for (i=0; i<rand8.length; i++)
+    {
+        rand8[i]=lcg.rand();
+        lcg.setSeed();
+    }
+
+
 
     // STEGO
     for(i = 0, n = data.length; i < n; i += 4) {
@@ -88,13 +92,9 @@ function stego(buffer) { // buffer is dataURL
 //       data[i+2] = 0;
       for(j=0; j < 3; ++j){
         rando = rand8[ (i + j)] & 1;
-        if(rando){
-          data[i + j] |= rando;
-        }else{
-          data[i + j] &= 254;
+        data[i + j] ^= rando;
         }
       }
-    }
     ctx.putImageData(imageData, 0, 0);
     stegified = dataUrlToBase64(canvas.toDataURL("image/png"));
     console.log("stegified is " + typeof stegified);

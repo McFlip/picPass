@@ -35,7 +35,7 @@ with conn:
     conn.execute(insert, params)
   print "<html><body>"
   print "Success!<br>"
-  print "<a href='/'>Return Home</a>"
+  print "<a href='/picPass/prototype/index.html'>Return Home</a>"
   print "<table>"
   print "<tr><th>Name</th><th>Password</th><th>Lamport Number</th></tr>"
   for row in conn.execute("SELECT `Username`, `Password`, `Lamport` FROM `users`"):

@@ -27,11 +27,11 @@ print """
   <meta charset="utf-8">
   <title>Pic PassI</title>
 
-  <link rel="stylesheet" href="/style.css">
-  <script src="/sha256.js"></script>
-  <script src="/hmac-sha256.js"></script>
-  <script src="/enc-base64.js"></script>
-  <script src="/register.js"></script>
+  <link rel="stylesheet" href="/picPass/prototype/style.css">
+  <script src="/picPass/prototype/sha256.js"></script>
+  <script src="/picPass/prototype/hmac-sha256.js"></script>
+  <script src="/picPass/prototype/enc-base64.js"></script>
+  <script src="/picPass/prototype/register.js"></script>
 
   </head>
   <body>
@@ -73,6 +73,6 @@ if not row:
 else:
   print """
   <strong>That Username already exists. Please try again</strong><br>
-  <a href=/index.html>Go Back</a>
+  <a href=/picPass/prototype/index.html>Go Back</a>
   </div></body></html>
   """

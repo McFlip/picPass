@@ -18,11 +18,11 @@ print """
 <meta charset="utf-8">
 <title>Pic PassI</title>
 
-<link rel="/stylesheet" href="style.css">
-<script src="/sha256.js"></script>
-<script src="/hmac-sha256.js"></script>
-<script src="/enc-base64.js"></script>
-<script src="/login.js"></script>
+<link rel="stylesheet" href="/picPass/prototype/style.css">
+<script src="/picPass/prototype/sha256.js"></script>
+<script src="/picPass/prototype/hmac-sha256.js"></script>
+<script src="/picPass/prototype/enc-base64.js"></script>
+<script src="/picPass/prototype/login.js"></script>
 
 </head>
 <body>
@@ -44,8 +44,8 @@ with conn:
         <input type="text" id="uname" name="uname" value="%s"><br>
         <label>PIN for 2-factor authentication</label><br>
         <input type="password" id="pin" name="pin"><br>
-        <label>Nth sha256</label><label>N = </label><input id="lamport" name="lamport" value="%s"><br>
-        <input type="textarea" id="sha" name="sha" value="" ><br>
+        <label>Lamport Number -1 = </label><input id="lamport" name="lamport" value="%s"><br>
+       	<label>Nth sha256 </label> <input type="textarea" id="sha" name="sha" value="" ><br>
         <label>Nth sha256 in base64</label><br>
         <input type="textarea" id="shab64" name="shab64" value="" ><br>
         <input id="login" type="submit" value="login" disabled="true">
@@ -55,7 +55,6 @@ with conn:
         </body>
         </html>
         """ % (unameQuery[0],unameQuery[1]-1)
-        print unameQuery
     else:
 
         print """<strong>That Username doesn't exist</strong>"""

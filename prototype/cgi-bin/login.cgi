@@ -13,9 +13,6 @@ form = cgi.FieldStorage()
 
 uname = form.getvalue('uname')
 pw = form.getvalue('sha')
-print "name: ", uname
-print "pw: ", pw
-print "<br>"
 path = '/var/www/html/picPass/prototype/db/app.db'
 #path = ':memory:'
 
@@ -31,7 +28,8 @@ with conn:
   if checkPW == storedPW:
     print "<html><body>"
     print "Success!<br>"
-    print "<a href='/'>Return Home</a>"
+    print "Sha from server %s <br>" %(checkPW)
+    print "<a href='/picPass/prototype/index.html'>Return Home</a>"
     params = (pw, lamport, uname)
     conn.execute(update, params)
     row = conn.execute(select, (uname,)).fetchone()
@@ -43,7 +41,7 @@ with conn:
     print "</table>"
     if lamport == 1:
       print "<strong>You have reached your login limit! You must reset your Password.</strong>"
-      print "<a href='/register.php'>Reset Password</a>"
+      print "<a href='/picPass/prototype/index.html'>Reset Password</a>"
     print "</body></html>"
   else:
     print "Failed Bad PW<br>"

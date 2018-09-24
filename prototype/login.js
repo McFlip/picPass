@@ -13,7 +13,7 @@ function lamportHash(hash, rnd, pin){
     hash = CryptoJS.SHA256(tempstr);
 //     hash = CryptoJS.HmacSHA256(tempstr, pin);
     tempstr = hash.toString();
-    console.log(tempstr);
+    console.log("sha " + i + "from client " + tempstr);
   }
   document.getElementById('sha').value = hash.toString();
   document.getElementById('shab64').value = hash.toString(CryptoJS.enc.Base64);
@@ -36,11 +36,10 @@ window.onload = function() {
         var b64 = dataUrlToBase64(binary);
         var words = CryptoJS.enc.Base64.parse(b64);
         var pin = document.getElementById('pin').value.toString();
-        alert("pin: " + pin);
         var sha256 = CryptoJS.HmacSHA256(words, pin);
 //         var sha256 = CryptoJS.SHA256(words);
         console.log("1'st SHA256: " + sha256.toString());
-        lamportHash(sha256, rounds, pin);
+        lamportHash(sha256, rounds);
       }
 
       reader.readAsDataURL(file);
